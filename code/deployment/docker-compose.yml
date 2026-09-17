@@ -1,0 +1,19 @@
+services:
+  # API с обученной моделью классификации жанров
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Подключаем папку с моделью, которую создаёт code/models/train_model.py
+      - ../../models:/app/models
+
+  # Веб-приложение, с которым взаимодействует пользователь
+  app:
+    build: ./app
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000
+    depends_on:
+      - api

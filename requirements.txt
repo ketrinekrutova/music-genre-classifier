@@ -1,0 +1,7 @@
+# Библиотеки для обработки данных и обучения модели.
+# У API и приложения свои requirements.txt внутри code/deployment/.
+pandas
+numpy
+scikit-learn
+mlflow
+joblib

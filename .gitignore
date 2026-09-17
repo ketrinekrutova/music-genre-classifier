@@ -1,0 +1,21 @@
+# Виртуальное окружение и кэш Python
+.venv/
+__pycache__/
+*.pyc
+
+# IDE / инструменты
+.idea/
+.claude/
+*.log
+
+# MLflow локальные логи экспериментов
+mlruns/
+mlartifacts/
+mlflow.db
+
+# Обработанные данные и обученная модель создаются пайплайном автоматически,
+# их не нужно хранить в git (если модель большая, для ассайнмента это допустимо)
+data/processed/*
+!data/processed/.gitkeep
+models/*
+!models/.gitkeep

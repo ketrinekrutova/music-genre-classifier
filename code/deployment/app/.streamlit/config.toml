@@ -1,0 +1,12 @@
+[theme]
+base = "dark"
+primaryColor = "#FF5831"
+backgroundColor = "#23190E"
+secondaryBackgroundColor = "#2E2115"
+textColor = "#F5EFE6"
+font = "sans serif"
+
+[client]
+# Официальная настройка Streamlit — убирает служебную кнопку "Deploy" и меню
+# с тремя точками в правом верхнем углу (это элементы конструктора, не нужны в готовом приложении)
+toolbarMode = "minimal"
