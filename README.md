@@ -24,7 +24,8 @@ requirements.txt                - зависимости для data/model ст�
 ## Датасет
 
 Используется [GTZAN Genre Collection](https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification)
-(файл с готовыми аудио-признаками, например `features_30_sec.csv`). Файл нужно положить в `data/raw/`.
+— файл `features_3_sec.csv` (готовые аудио-признаки: MFCC, chroma, spectral и т.д.).
+Файл нужно положить в `data/raw/`. В репозитории он уже есть.
 
 ## Как запустить
 
@@ -34,7 +35,7 @@ requirements.txt                - зависимости для data/model ст�
    .venv\Scripts\activate
    pip install -r requirements.txt
    ```
-2. Положить csv файл с данными в `data/raw/`.
+2. Датасет уже лежит в `data/raw/features_3_sec.csv` — ничего скачивать не нужно.
 3. Убедиться, что установлен и запущен Docker Desktop.
 4. Запустить пайплайн один раз:
    ```
@@ -49,11 +50,18 @@ requirements.txt                - зависимости для data/model ст�
 
 - Веб-приложение: http://localhost:8501
 - API (документация Swagger): http://localhost:8000/docs
-- MLflow эксперименты: `mlflow ui --backend-store-uri mlruns` → http://localhost:5000
+- MLflow эксперименты: `mlflow ui --backend-store-uri sqlite:///mlflow.db` → http://localhost:5000
 
 ## Как это работает
 
 1. **Data Engineering** (`code/datasets/data_pipeline.py`) — читает csv из `data/raw`, убирает пропуски и выбросы, делит на train/test, сохраняет в `data/processed`.
 2. **Model Engineering** (`code/models/train_model.py`) — масштабирует признаки, обучает `RandomForestClassifier`, считает accuracy/F1 на тесте, логирует всё в MLflow, сохраняет модель в `models/`.
-3. **Deployment** (`code/deployment/`) — API загружает модель и отдаёт предсказания, приложение собирает форму ввода по списку признаков из API и показывает предсказанный жанр.
+3. **Deployment** (`code/deployment/`) — API отдаёт предсказания по признакам, приложение предлагает два способа их получить:
+   - загрузить свой аудиофайл (wav/mp3) — признаки считаются автоматически через `librosa`;
+   - ввести признаки вручную, либо заполнить их одной кнопкой реальным примером из датасета.
 4. **Автоматизация** (`scheduler.py`) — каждые 5 минут заново прогоняет весь пайплайн и пересобирает Docker-контейнеры с обновлённой моделью.
+
+## Обученная модель
+
+Файлы `models/*.pkl` не хранятся в репозитории (см. `.gitignore`) — они создаются автоматически
+на шаге 4 из раздела "Как запустить" (`python run_pipeline.py`). Отдельно скачивать их не нужно.
